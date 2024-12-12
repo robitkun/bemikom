@@ -28,5 +28,15 @@ const login = async (req, res, next) => {
     next(err);
   }
 };
-
-export { register, login };
+const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await userService.getAllUsers();
+    res.status(200).json({
+      data: users,
+      message: 'success',
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+export { register, login, getAllUsers };

@@ -62,7 +62,7 @@ const login = async (req) => {
   if (!user) {
     throw new ResponseError(400, 'Email or Password is incorrect');
   }
-  const validPassword = bcrypt.compare(loginReq.password, user.password);
+  const validPassword = await bcrypt.compare(loginReq.password, user.password);
   if (!validPassword) {
     throw new ResponseError(400, 'Email or password is incorrect');
   }
@@ -74,4 +74,21 @@ const login = async (req) => {
 
   return { user, token };
 };
-export default { register, login };
+const getAllUsers = async () => {
+  const result = await prismaClient.user.findMany({
+    select: {
+      id: true,
+      username: true,
+      email: true,
+      username: true,
+      role: true,
+      created_at: true,
+    },
+  });
+  if (result.length === 0) {
+    throw new ResponseError(404, 'Users Not Found');
+  }
+  return result;
+};
+
+export default { register, login, getAllUsers };
