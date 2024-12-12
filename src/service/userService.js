@@ -1,11 +1,15 @@
 import validate from '../validation/validation.js';
-import { registerValidation } from '../validation/userValidation.js';
+import {
+  registerValidation,
+  loginValidation,
+} from '../validation/userValidation.js';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import { v4 as uuid } from 'uuid';
+import jwt from 'jsonwebtoken';
 import ResponseError from '../error/responseError.js';
 const prismaClient = new PrismaClient();
-
+import dotenv from 'dotenv';
+dotenv.config();
 const register = async (req) => {
   const user = validate(registerValidation, req);
   const countUsername = await prismaClient.user.count({
@@ -32,7 +36,42 @@ const register = async (req) => {
       email: true,
     },
   });
-  return result;
+  const token = jwt.sign(
+    {
+      userId: user.id,
+      username: user.name,
+      role: user.role,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '2h' }
+  );
+  return { result, token };
 };
 
-export default { register };
+const login = async (req) => {
+  const loginReq = validate(loginValidation, req);
+  const user = await prismaClient.user.findUnique({
+    where: {
+      email: loginReq.email,
+    },
+    select: {
+      email: true,
+      username: true,
+    },
+  });
+  if (!user) {
+    throw new ResponseError(400, 'Email or Password is incorrect');
+  }
+  const validPassword = bcrypt.compare(loginReq.password, user.password);
+  if (!validPassword) {
+    throw new ResponseError(400, 'Email or password is incorrect');
+  }
+  const token = jwt.sign(
+    { userId: user.id, username: user.username, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+
+  return { user, token };
+};
+export default { register, login };
