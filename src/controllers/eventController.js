@@ -15,7 +15,6 @@ const createEvent = async (req, res, next) => {
     next(error);
   }
 };
-
 const getEventById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -39,7 +38,6 @@ const getAllEvent = async (req, res, next) => {
     next(err);
   }
 };
-
 const updateEvent = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -57,7 +55,6 @@ const updateEvent = async (req, res, next) => {
     next(err);
   }
 };
-
 const deleteEvent = async (req, res, next) => {
   try {
     const { id } = req.params;

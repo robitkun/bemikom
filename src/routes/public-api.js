@@ -10,6 +10,13 @@ import {
   updateEvent,
   deleteEvent,
 } from '../controllers/eventController.js';
+import {
+  createForum,
+  deleteForum,
+  getAllForum,
+  getForumById,
+  updateForum,
+} from '../controllers/forumController.js';
 export const router = express.Router();
 
 // USER
@@ -41,3 +48,10 @@ router.delete(
   upload.single('image'),
   deleteEvent
 );
+
+// FORUM
+router.post('/forums/create', authenticateToken, createForum);
+router.delete('/forums/delete/:id', authenticateToken, deleteForum);
+router.put('/forums/update/:id', authenticateToken, updateForum);
+router.get('/forums', getAllForum);
+router.get('/forums/:id', getForumById);
