@@ -32,18 +32,20 @@ const register = async (req) => {
   const result = await prismaClient.user.create({
     data: user,
     select: {
+      id: true,
       username: true,
       email: true,
+      role: true,
     },
   });
   const token = jwt.sign(
     {
-      userId: user.id,
-      username: user.name,
-      role: user.role,
+      userId: result.id,
+      username: result.username,
+      role: result.role,
     },
     process.env.JWT_SECRET,
-    { expiresIn: '2h' }
+    { expiresIn: '1h' }
   );
   return { result, token };
 };
@@ -57,6 +59,8 @@ const login = async (req) => {
     select: {
       email: true,
       username: true,
+      password: true,
+      role: true,
     },
   });
   if (!user) {
@@ -80,7 +84,6 @@ const getAllUsers = async () => {
       id: true,
       username: true,
       email: true,
-      username: true,
       role: true,
       created_at: true,
     },

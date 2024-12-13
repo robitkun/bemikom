@@ -15,8 +15,9 @@ const authenticateToken = (req, res, next) => {
         error: 'Invalid or expired token',
       });
     }
-
+    console.log('Decoded JWT:', user);
     req.user = user;
+    console.log('User data:', req.user);
     next();
   });
 };
