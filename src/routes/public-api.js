@@ -17,12 +17,17 @@ import {
   getForumById,
   updateForum,
 } from '../controllers/forumController.js';
+import {
+  createComment,
+  getAllComment,
+} from '../controllers/commentController.js';
+import { addContact } from '../controllers/contactController.js';
 export const router = express.Router();
 
 // USER
 router.post('/users/register', register);
 router.post('/users/login', login);
-router.get('/users', authenticateToken, adminOnly, getAllUsers);
+router.get('/users', getAllUsers);
 
 // EVENT
 router.post(
@@ -55,3 +60,10 @@ router.delete('/forums/delete/:id', authenticateToken, deleteForum);
 router.put('/forums/update/:id', authenticateToken, updateForum);
 router.get('/forums', getAllForum);
 router.get('/forums/:id', getForumById);
+
+// COMMENT
+router.post('/comment/create', authenticateToken, createComment);
+router.get('/comment/:forum_id', getAllComment);
+
+//CONTACT
+router.post('/contact/create', authenticateToken, addContact);
