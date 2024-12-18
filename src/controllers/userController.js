@@ -8,9 +8,6 @@ const register = async (req, res, next) => {
       token,
     });
   } catch (error) {
-    res.status(500).json({
-      error: error.message,
-    });
     next(error);
   }
 };
@@ -36,4 +33,18 @@ const getAllUsers = async (req, res, next) => {
     next(err);
   }
 };
-export { register, login, getAllUsers };
+const getMe = async (req, res, next) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+export { register, login, getAllUsers, getMe };

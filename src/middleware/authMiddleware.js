@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
-
+import dotenv from 'dotenv';
+dotenv.config();
 const authenticateToken = (req, res, next) => {
   const token = req.header('Authorization')?.split(' ')[1];
-
   if (!token) {
     return res.status(403).json({
       error: 'Access Denied. No token provided',
@@ -15,9 +15,7 @@ const authenticateToken = (req, res, next) => {
         error: 'Invalid or expired token',
       });
     }
-    console.log('Decoded JWT:', user);
     req.user = user;
-    console.log('User data:', req.user);
     next();
   });
 };

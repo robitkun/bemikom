@@ -36,6 +36,7 @@ const register = async (req) => {
       username: true,
       email: true,
       role: true,
+      created_at: true,
     },
   });
   const token = jwt.sign(
@@ -43,6 +44,8 @@ const register = async (req) => {
       userId: result.id,
       username: result.username,
       role: result.role,
+      email: result.email,
+      created_at: result.created_at,
     },
     process.env.JWT_SECRET,
     { expiresIn: '1h' }
@@ -62,6 +65,7 @@ const login = async (req) => {
       username: true,
       password: true,
       role: true,
+      created_at: true,
     },
   });
   if (!user) {
@@ -72,7 +76,13 @@ const login = async (req) => {
     throw new ResponseError(400, 'Email or password is incorrect');
   }
   const token = jwt.sign(
-    { userId: user.id, username: user.username, role: user.role },
+    {
+      userId: user.id,
+      username: user.username,
+      role: user.role,
+      email: user.email,
+      created_at: user.created_at,
+    },
     process.env.JWT_SECRET,
     { expiresIn: '1h' }
   );

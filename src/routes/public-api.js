@@ -1,7 +1,12 @@
 import express from 'express';
 import { adminOnly } from '../middleware/adminOnly.js';
 import authenticateToken from '../middleware/authMiddleware.js';
-import { register, login, getAllUsers } from '../controllers/userController.js';
+import {
+  register,
+  login,
+  getAllUsers,
+  getMe,
+} from '../controllers/userController.js';
 import { upload } from '../middleware/uploadMiddleware.js';
 import {
   createEvent,
@@ -28,7 +33,7 @@ export const router = express.Router();
 router.post('/users/register', register);
 router.post('/users/login', login);
 router.get('/users', getAllUsers);
-
+router.get('/users/me', authenticateToken, getMe);
 // EVENT
 router.post(
   '/event/upload',
