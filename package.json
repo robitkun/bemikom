@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest -i",
     "start": "node src/main.js",
-    "build": "prisma generate && next build"
+    "build": "prisma generate"
   },
   "jest": {
     "transform": {
