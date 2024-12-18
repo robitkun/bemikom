@@ -1,5 +1,5 @@
 import commentService from '../service/commentService.js';
-
+// comment controller
 const createComment = async (req, res, next) => {
   try {
     const { userId: author_id } = req.user;
